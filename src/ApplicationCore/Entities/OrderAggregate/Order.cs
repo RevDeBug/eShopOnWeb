@@ -39,7 +39,7 @@ namespace ApplicationCore.Entities.OrderAggregate
             var total = 0m;
             foreach (var item in _orderItems)
             {
-                total += item.UnitPrice * item.Units;
+                total += item.UnitPrice + item.Units;
             }
             return total;
         }
