@@ -31,10 +31,10 @@ namespace Microsoft.eShopWeb
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
             // use in-memory database
-            ConfigureTestingServices(services);
+            //ConfigureTestingServices(services);
 
             // use real database
-            // ConfigureProductionServices(services);
+            ConfigureProductionServices(services);
 
         }
         public void ConfigureTestingServices(IServiceCollection services)
@@ -112,7 +112,7 @@ namespace Microsoft.eShopWeb
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, 
+        public void Configure(IApplicationBuilder app,
             IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -131,6 +131,12 @@ namespace Microsoft.eShopWeb
             app.UseAuthentication();
 
             app.UseMvc();
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetService<CatalogContext>().Database.EnsureCreated();
+                serviceScope.ServiceProvider.GetService<AppIdentityDbContext>().Database.EnsureCreated();
+            }
         }
 
         private void ListAllRegisteredServices(IApplicationBuilder app)
