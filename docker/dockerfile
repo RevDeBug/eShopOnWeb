@@ -1,0 +1,5 @@
+FROM microsoft/aspnetcore:2.0.5
+ADD ./webapp /app
+WORKDIR /app
+
+ENTRYPOINT ["dotnet", "Web.dll"]
